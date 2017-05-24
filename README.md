@@ -28,3 +28,7 @@ npm run build --report
 | cameraPosZ    | 相机 Z 轴位置 3 ~ 10 | 5  |
 | skinUrl       | 自定义皮肤 URL  | "./static/char.png" |
 | modelScale    | 模型缩放 ≥ 0    |   1     |
+
+## refer to
+[erisdev/steve.js](https://github.com/erisdev/steve.js)
+
