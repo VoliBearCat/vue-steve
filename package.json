@@ -1,9 +1,10 @@
 {
   "name": "vue-steve",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
+  "version": "1.0.1",
+  "description": "A Vue.js project, Minecraft's Steve-Model",
   "author": "VolibearElric <624081567@qq.com>",
-  "private": true,
+  "private": false,
+  "main": "dist/vue-steve.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",

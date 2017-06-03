@@ -12,7 +12,7 @@
 </style>
 
 <script>
-var THREE = require('../../node_modules/three/build/three.min.js')
+var THREE = require('three')
 import steveJson from '../assets/steve'
 export default {
   name: 'steve',
@@ -25,7 +25,7 @@ export default {
       default: 640,
       validator: (val) => val >= 0
     },
-    maxStep: {
+    pace: {
       default: 0.6,
       validator: (val) => val >= 0 && val <= 1
     },
@@ -42,12 +42,24 @@ export default {
       validator: (val) => val >= 3 && val <= 10
     },
     skinUrl: {
-      default: "./static/char.png",
+      default: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAABGdBTUEAALGPC/xhBQAAABh0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjM2qefiJQAABONJREFUaEPll99rVEcUx6+IUk1ijbQYosYfG+OaRtb4g2JEY42/EYuRipqioqIxMQiLVlDE+INqKlSfAkq0UChIUXzwFyL2sU956X9TmofjfM/u9/ZknLs30cUN8cJh5s6cuTvfz5w5MzslSnmaF9QIXP4bGYmmT5um3qjjGfl3arT/28aSX7j9+p8pab8xofsBoLHuC8kt/FKN72iDnd+ek55NK+XnfWviEnW0wya0uLFMDoIpvql+ZiKATCYj1gBlUgDg6nPlURIKSkbApAVgxSICYHY7fBYAAMEXz3yQBKAz2zQ5tgDFQ/Dy+dUKYuHsqjghEgD2vG+TIgcAAIUzCpgMmQOY8UPlWBJtRX2y82YKDKKWzatSsasys2XFooLlFtXINw2FkyA7v0qPPviiDQDohzEYi2+gn99l0sQ4W8c7Iqmi4vHjFgAm3tIwS4VA4OrGWi1peN/cPEfam79WPwChD8agjVFiAZS6R1QcgE66rrBqBeFOmFvFxjq+18jLgTPy9te8/D3YL29v5139nDz+6ZCsWTpHx8AXYzA23i7um/h22j2i4gB0pepdKC+YVVhV944wRj23pFb+vHxSnt/o0/JJf58M5X+UNwN5GTq9Ww0+8MUYjEUd38I38Z52j5gYAOI8UC2ZuTPk5oE2GTq+VdqyX6l4PJ0bBuTFpVMqHnU8gAIf+GIMxjbVV8f7HwDS7hETB4BbMWyFloZaudHZKoNHvpNbh9Y5cdvk2aVj8upaPj7m/rp1Rn7v2S797s4PH/hiDMbiG1x9Aih1j6g4AIY9wvZYR04e9Hwv949v0T83ONbuHu5wAjfJhc1rR9mdwxvl6r516gNfjMFYfEO3QHE7pN0jKg4Ak6cAlEOnduiK/nJwvZzbkZOzW1ukr6NZxcIu7lkt139Yr4Y6fOD7W/dOHXv/xK5CWYRIkPYOgTrBVRyAP4H9O4fFWjabFWupEx4ejv8K+xejyPVFR4+WtrQfePRI9DswV8ftc2/r0rhMG57aXw4AoWsx2soCgOKL5ecNwEWAXX2F/LFPOSIg6b9BWSLA2wIfDWBlNi+wpsVdWm5r+2OU2T6/v611QKIrV/63ri6J7t2T6OFDTZg4Kpk80aZm/VFHG0TRnj6VCMb3JH/6+P0czzItIijwQwAAlgrq7i4Y6px4EQIAqEhOyPpjDPz9SVsA/Da/zz6UBGp//0MBMBLGEwEKIDRBThITRERYkdYf9ZB4GwUhwHaM3//JASDsKQp1OwECsG1J/gBFcLbuC7TR9KkiwOYB7HtrKh6iaJg8BUAQ62y3vgSGCAkBcONxKaPddJcv/P+whjbr4/enpYAolOQoECHu54j3AFhBgGEBhIRZYNwCoTHFbRMCMHi2K4aAfguhLABsHih1CsQ5gBAIgCFv9z9hEAC3jQ175goDxIpjBBAAyhAAbS9CGlMEMAGO9xgMngJ++FMUAfinQAhWAgCItSvsAwhtkbIAKAXovWPQJjz/BMB7Wtb2sjgjgGUIQKkckQqgvb1dYKWOQfTRr7e3V6zFgngh4er54c+E6AOw/vQxCdGK8yMAMGyOYL/dImMGkCSQ7Un9NkfgMuXfI/CuN0YDAH724sXEqveFIhC0YWwSAIoMRUjFAIRyCIEoBCcu9WrtfCxEf4VHJUCX6ELH4HgAvAMPTt9mhQSK5wAAAABJRU5ErkJggg==",
     },
-    modelScale: {
+    scale: {
       default: 1,
       validator: (val) => val > 0
-    }
+    },
+    followMouse: {
+      default: "true",
+      validator: (val) => ~['true', 'false'].indexOf(val)
+    },
+    followMouseMode: {
+      default: "box-scope",
+      validator: (val) => ~['box-scope', 'window-scope'].indexOf(val)
+    },
+    walkable: {
+      default: "true",
+      validator: (val) => ~['true', 'false'].indexOf(val)
+    },
   },
   data() {
     return {
@@ -89,11 +101,70 @@ export default {
       // this.renderer.setClearColor(0xFFFFFF, 0)
       // this.renderer.setClearAlpha(0)
 
-      this.renderer.domElement.addEventListener('mousemove', (event) => {
-        this.head_offset_x = event.offsetX / this.width * 1.6 - 1
-        this.head_offset_y = event.offsetY / this.height * 0.6 - 0.2
-        this.hover = true
-      })
+      if (this.followMouse == "true" && this.followMouseMode == "window-scope") {
+        document.addEventListener('mousemove', (event) => {
+          var rect = document.getElementById('steve').getBoundingClientRect()
+          var marginLeft = rect.left + this.width / 2
+          var offsetX = event.clientX - marginLeft
+          var marginTop = rect.top + this.height / 2
+          var offsetY = event.clientY - marginTop
+
+          if (offsetX === 0) {
+            this.head_offset_x = -0.2
+          }
+          else if (Math.abs(offsetX) <= 500) {
+            this.head_offset_x = offsetX / 500 * 0.6 - 0.2
+          }
+          else if (Math.abs(offsetX) > 500 && Math.abs(offsetX) <= 1000)
+            if (offsetX >= 0)
+              this.head_offset_x = 0.4 + (offsetX - 500) / 500 * 0.1
+            else
+              this.head_offset_x = -0.8 + (offsetX + 500) / 500 * 0.1
+          else if (Math.abs(offsetX) > 1000 && Math.abs(offsetX) <= 2000)
+            if (offsetX >= 0)
+              this.head_offset_x = 0.5 + (offsetX - 1000) / 1000 * 0.1
+            else
+              this.head_offset_x = -0.9 + (offsetX + 1000) / 1000 * 0.1
+          else {
+            if (offsetX >= 0)
+              this.head_offset_x = 0.6
+            else
+              this.head_offset_x = -1
+          }
+
+
+          if (offsetY === 0) {
+            this.head_offset_y = 0.1
+          }
+          else if (Math.abs(offsetY) <= 300) {
+            this.head_offset_y = offsetY / 300 * 0.2 + 0.1
+          }
+          else if (Math.abs(offsetY) > 300 && Math.abs(offsetY) <= 600)
+            if (offsetY >= 0)
+              this.head_offset_y = 0.3 + (offsetY - 300) / 300 * 0.1
+            else
+              this.head_offset_y = -0.1 + (offsetY + 300) / 300 * 0.15
+          else if (Math.abs(offsetY) > 600 && Math.abs(offsetY) <= 900)
+            if (offsetY >= 0)
+              this.head_offset_y = 0.4 + (offsetY - 600) / 300 * 0.1
+            else
+              this.head_offset_y = -0.25 + (offsetY + 600) / 300 * 0.15
+          else {
+            if (offsetY >= 0)
+              this.head_offset_y = 0.5
+            else
+              this.head_offset_y = -0.4
+          }
+          this.hover = true
+        })
+      } else if (this.followMouse == "true" && this.followMouseMode == "box-scope") {
+        this.renderer.domElement.addEventListener('mousemove', (event) => {
+          this.head_offset_x = event.offsetX / this.width * 1.6 - 1
+          this.head_offset_y = event.offsetY / this.height * 0.6 - 0.2
+          this.hover = true
+        })
+      }
+
       this.renderer.domElement.addEventListener('mouseout', (event) => {
         this.hover = false
       })
@@ -166,27 +237,29 @@ export default {
       }
 
       this.model = new THREE.Object3D()
-      this.model.scale.set(0.1 * this.modelScale, 0.1 * this.modelScale, 0.1 * this.modelScale)
+      this.model.scale.set(0.1 * this.scale, 0.1 * this.scale, 0.1 * this.scale)
       this.scene.add(this.model)
     },
     animation() {
       this.tasks
-      this.walk()
-      this.followMouse()
+      this.walkAction()
+      this.followMouseAction()
       this.renderer.render(this.scene, this.camera)
       requestAnimationFrame(this.animation)
     },
-    walk() {
+    walkAction() {
+      if (this.walkable !== "true") return;
       this.armL_x = this.legR_x = this.legR_x = this.baseValue = this.baseValue + this.stepDirection * this.stepCycle
       this.armR_x = this.legL_x = -this.baseValue + this.stepDirection * this.stepCycle
       this.model.rotation.y = this.baseValue / 5
       this.head_y = this.baseValue / -8
       this.head_x = this.baseValue / 24
-      if (Math.abs(this.baseValue) > this.maxStep) {
+      if (Math.abs(this.baseValue) > this.pace) {
         this.stepDirection *= -1
       }
     },
-    followMouse() {
+    followMouseAction() {
+      if (this.followMouse !== "true") return;
       if (!this.hover) {
         if (this.head_offset_x > 0.01) this.head_offset_x -= 0.01
         else if (this.head_offset_x < -0.01) this.head_offset_x += 0.01
@@ -226,32 +299,32 @@ export default {
         }
         part.traverse((childPart) => {
           if (childPart.name) {
-            Object.defineProperty(this, [childPart.name] + '_x', {
-              set: function (x) {
-                childPart.rotation.x = x
+            Object.defineProperties(this, {
+              [childPart.name + '_x']: {
+                set: function (x) {
+                  childPart.rotation.x = x
+                },
+                get: function () {
+                  return childPart.rotation.x
+                }
               },
-              get: function () {
-                return childPart.rotation.x
+              [childPart.name + '_y']: {
+                set: function (y) {
+                  childPart.rotation.y = y
+                },
+                get: function () {
+                  return childPart.rotation.y || 0
+                }
+              },
+              [childPart.name + '_z']: {
+                set: function (z) {
+                  childPart.rotation.z = z
+                },
+                get: function () {
+                  return childPart.rotation.z || 0
+                }
               }
             })
-            Object.defineProperty(this, [childPart.name] + '_y', {
-              set: function (y) {
-                childPart.rotation.y = y
-              },
-              get: function () {
-                return childPart.rotation.y || 0
-              }
-            })
-            Object.defineProperty(this, [childPart.name] + '_z', {
-              set: function (z) {
-                childPart.rotation.z = z
-              },
-              get: function () {
-                return childPart.rotation.z || 0
-              }
-            })
-          }else{
-
           }
         })
       }

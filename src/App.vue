@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Steve skinUrl="./static/technologist.png"></Steve>
+    <Steve skinUrl="./static/technologist.png" followMouseMode="window-scope"></Steve>
   </div>
 </template>
 
@@ -22,6 +22,5 @@ export default {
 }
 #app {
   background: #666;
-  text-align: center;
 }
 </style>
