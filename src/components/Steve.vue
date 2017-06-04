@@ -1,11 +1,9 @@
 <template>
-  <div id="steve">
-  
-  </div>
+  <div class="steve-container"></div>
 </template>
 
-<style type="text/css" scoped>
-#steve {
+<style>
+.steve-container {
   position: relative;
   display: inline-block;
 }
@@ -13,6 +11,7 @@
 
 <script>
 var THREE = require('three')
+// import 'three'
 import steveJson from '../assets/steve'
 export default {
   name: 'steve',
@@ -97,13 +96,13 @@ export default {
         alpha: true
       })
       this.renderer.setSize(this.width, this.height)
-      document.getElementById('steve').appendChild(this.renderer.domElement)
+      this.$el.appendChild(this.renderer.domElement)
       // this.renderer.setClearColor(0xFFFFFF, 0)
       // this.renderer.setClearAlpha(0)
 
       if (this.followMouse == "true" && this.followMouseMode == "window-scope") {
         document.addEventListener('mousemove', (event) => {
-          var rect = document.getElementById('steve').getBoundingClientRect()
+          var rect = this.$el.getBoundingClientRect()
           var marginLeft = rect.left + this.width / 2
           var offsetX = event.clientX - marginLeft
           var marginTop = rect.top + this.height / 2

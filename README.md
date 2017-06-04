@@ -9,8 +9,10 @@
 ## Usage
 
 ``` bash
+npm install three --save
 npm install vue-steve --save
 
+import 'three'
 import Steve from 'vue-steve'
 
 export default {
@@ -23,6 +25,10 @@ export default {
 
 <steve skinUrl="./xxx.png" followMouseMode="window-scope"></steve>
 ```
+
+## Dependencies
+
+[three.js](https://github.com/mrdoob/three.js)
 
 ## Props
 

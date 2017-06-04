@@ -1,6 +1,6 @@
 {
   "name": "vue-steve",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Vue.js project, Minecraft's Steve-Model",
   "author": "VolibearElric <624081567@qq.com>",
   "private": false,
@@ -8,9 +8,11 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "pub": "node build/pub.js"
   },
   "dependencies": {
+    "three": "^0.85.2",
     "vue": "^2.2.6"
   },
   "devDependencies": {

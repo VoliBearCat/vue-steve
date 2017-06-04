@@ -9,7 +9,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    'vue-steve': './src/index.js'
+    'vue-steve': './src/main.js'
   },
   output: {
     path: config.build.assetsRoot,

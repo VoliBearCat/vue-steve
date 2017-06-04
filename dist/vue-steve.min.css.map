@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./src/components/Steve.vue"],"names":[],"mappings":"AACA,wBACE,kBACA,oBAAsB","file":"vue-steve.min.css","sourcesContent":["\n#steve[data-v-7cede294] {\n  position: relative;\n  display: inline-block;\n}\n\n\n\n// WEBPACK FOOTER //\n// ./src/components/Steve.vue"],"sourceRoot":""}
