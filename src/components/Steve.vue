@@ -1,5 +1,6 @@
 <template>
-  <div class="steve-container"></div>
+  <div class="steve-container">
+  </div>
 </template>
 
 <style>
@@ -28,17 +29,17 @@ export default {
       default: 0.6,
       validator: (val) => val >= 0 && val <= 1
     },
-    cameraPosX: {
-      default: -1.2,
-      validator: (val) => val >= -3 && val <= 3
+    speed: {
+      type: Number,
+      default: 2
     },
-    cameraPosY: {
-      default: 1,
-      validator: (val) => val >= -2
+    rotationX: {
+      type: Number,
+      default: 10
     },
-    cameraPosZ: {
-      default: 5,
-      validator: (val) => val >= 3 && val <= 10
+    rotationY: {
+      type: Number,
+      default: 10
     },
     skinUrl: {
       default: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAABGdBTUEAALGPC/xhBQAAABh0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjM2qefiJQAABONJREFUaEPll99rVEcUx6+IUk1ijbQYosYfG+OaRtb4g2JEY42/EYuRipqioqIxMQiLVlDE+INqKlSfAkq0UChIUXzwFyL2sU956X9TmofjfM/u9/ZknLs30cUN8cJh5s6cuTvfz5w5MzslSnmaF9QIXP4bGYmmT5um3qjjGfl3arT/28aSX7j9+p8pab8xofsBoLHuC8kt/FKN72iDnd+ek55NK+XnfWviEnW0wya0uLFMDoIpvql+ZiKATCYj1gBlUgDg6nPlURIKSkbApAVgxSICYHY7fBYAAMEXz3yQBKAz2zQ5tgDFQ/Dy+dUKYuHsqjghEgD2vG+TIgcAAIUzCpgMmQOY8UPlWBJtRX2y82YKDKKWzatSsasys2XFooLlFtXINw2FkyA7v0qPPviiDQDohzEYi2+gn99l0sQ4W8c7Iqmi4vHjFgAm3tIwS4VA4OrGWi1peN/cPEfam79WPwChD8agjVFiAZS6R1QcgE66rrBqBeFOmFvFxjq+18jLgTPy9te8/D3YL29v5139nDz+6ZCsWTpHx8AXYzA23i7um/h22j2i4gB0pepdKC+YVVhV944wRj23pFb+vHxSnt/o0/JJf58M5X+UNwN5GTq9Ww0+8MUYjEUd38I38Z52j5gYAOI8UC2ZuTPk5oE2GTq+VdqyX6l4PJ0bBuTFpVMqHnU8gAIf+GIMxjbVV8f7HwDS7hETB4BbMWyFloZaudHZKoNHvpNbh9Y5cdvk2aVj8upaPj7m/rp1Rn7v2S797s4PH/hiDMbiG1x9Aih1j6g4AIY9wvZYR04e9Hwv949v0T83ONbuHu5wAjfJhc1rR9mdwxvl6r516gNfjMFYfEO3QHE7pN0jKg4Ak6cAlEOnduiK/nJwvZzbkZOzW1ukr6NZxcIu7lkt139Yr4Y6fOD7W/dOHXv/xK5CWYRIkPYOgTrBVRyAP4H9O4fFWjabFWupEx4ejv8K+xejyPVFR4+WtrQfePRI9DswV8ftc2/r0rhMG57aXw4AoWsx2soCgOKL5ecNwEWAXX2F/LFPOSIg6b9BWSLA2wIfDWBlNi+wpsVdWm5r+2OU2T6/v611QKIrV/63ri6J7t2T6OFDTZg4Kpk80aZm/VFHG0TRnj6VCMb3JH/6+P0czzItIijwQwAAlgrq7i4Y6px4EQIAqEhOyPpjDPz9SVsA/Da/zz6UBGp//0MBMBLGEwEKIDRBThITRERYkdYf9ZB4GwUhwHaM3//JASDsKQp1OwECsG1J/gBFcLbuC7TR9KkiwOYB7HtrKh6iaJg8BUAQ62y3vgSGCAkBcONxKaPddJcv/P+whjbr4/enpYAolOQoECHu54j3AFhBgGEBhIRZYNwCoTHFbRMCMHi2K4aAfguhLABsHih1CsQ5gBAIgCFv9z9hEAC3jQ175goDxIpjBBAAyhAAbS9CGlMEMAGO9xgMngJ++FMUAfinQAhWAgCItSvsAwhtkbIAKAXovWPQJjz/BMB7Wtb2sjgjgGUIQKkckQqgvb1dYKWOQfTRr7e3V6zFgngh4er54c+E6AOw/vQxCdGK8yMAMGyOYL/dImMGkCSQ7Un9NkfgMuXfI/CuN0YDAH724sXEqveFIhC0YWwSAIoMRUjFAIRyCIEoBCcu9WrtfCxEf4VHJUCX6ELH4HgAvAMPTt9mhQSK5wAAAABJRU5ErkJggg==",
@@ -70,12 +71,13 @@ export default {
       skin: '',
       parts: {},
       model: {},
-      stepCycle: 0.02,
       stepDirection: 1,
       baseValue: 0,
       head_offset_x: 0,
       head_offset_y: 0,
       hover: false,
+      tempX: 0,
+      tempY: 0
     }
   },
   mounted() {
@@ -86,6 +88,8 @@ export default {
     this.initObject()
     setTimeout(() => {
       this.model.add(this.buildModel(steveJson))
+      this.model.rotation.y = this.rotationX / 180 * Math.PI
+      this.model.rotation.x = this.rotationY / 180 * Math.PI
       this.animation()
     }, 0)
   },
@@ -107,54 +111,58 @@ export default {
           var offsetX = event.clientX - marginLeft
           var marginTop = rect.top + this.height / 2
           var offsetY = event.clientY - marginTop
-
+          this.tempX = this.head_offset_x
+          this.tempY = this.head_offset_y
           if (offsetX === 0) {
-            this.head_offset_x = -0.2
+            this.tempX = 0
           }
           else if (Math.abs(offsetX) <= 500) {
-            this.head_offset_x = offsetX / 500 * 0.6 - 0.2
+            this.tempX = offsetX / 500 * 0.6 - this.rotationX / 180 * Math.PI
           }
           else if (Math.abs(offsetX) > 500 && Math.abs(offsetX) <= 1000)
             if (offsetX >= 0)
-              this.head_offset_x = 0.4 + (offsetX - 500) / 500 * 0.1
+              this.tempX = 0.6 + (offsetX - 500) / 500 * 0.1 - this.rotationX / 180 * Math.PI
             else
-              this.head_offset_x = -0.8 + (offsetX + 500) / 500 * 0.1
+              this.tempX = -0.6 + (offsetX + 500) / 500 * 0.1 - this.rotationX / 180 * Math.PI
           else if (Math.abs(offsetX) > 1000 && Math.abs(offsetX) <= 2000)
             if (offsetX >= 0)
-              this.head_offset_x = 0.5 + (offsetX - 1000) / 1000 * 0.1
+              this.tempX = 0.7 + (offsetX - 1000) / 1000 * 0.1 - this.rotationX / 180 * Math.PI
             else
-              this.head_offset_x = -0.9 + (offsetX + 1000) / 1000 * 0.1
+              this.tempX = -0.7 + (offsetX + 1000) / 1000 * 0.1 - this.rotationX / 180 * Math.PI
           else {
             if (offsetX >= 0)
-              this.head_offset_x = 0.6
+              this.tempX = 0.8 - this.rotationX / 180 * Math.PI
             else
-              this.head_offset_x = -1
+              this.tempX = -0.8 - this.rotationX / 180 * Math.PI
           }
-
 
           if (offsetY === 0) {
-            this.head_offset_y = 0.1
+            this.tempY = 0.1 - this.rotationY / 360 * Math.PI
           }
           else if (Math.abs(offsetY) <= 300) {
-            this.head_offset_y = offsetY / 300 * 0.2 + 0.1
+            this.tempY = offsetY / 300 * 0.2 + 0.1 - this.rotationY / 360 * Math.PI
           }
           else if (Math.abs(offsetY) > 300 && Math.abs(offsetY) <= 600)
             if (offsetY >= 0)
-              this.head_offset_y = 0.3 + (offsetY - 300) / 300 * 0.1
+              this.tempY = 0.3 + (offsetY - 300) / 300 * 0.1 - this.rotationY / 360 * Math.PI
             else
-              this.head_offset_y = -0.1 + (offsetY + 300) / 300 * 0.15
+              this.tempY = -0.1 + (offsetY + 300) / 300 * 0.15 - this.rotationY / 360 * Math.PI
           else if (Math.abs(offsetY) > 600 && Math.abs(offsetY) <= 900)
             if (offsetY >= 0)
-              this.head_offset_y = 0.4 + (offsetY - 600) / 300 * 0.1
+              this.tempY = 0.4 + (offsetY - 600) / 300 * 0.1 - this.rotationY / 360 * Math.PI
             else
-              this.head_offset_y = -0.25 + (offsetY + 600) / 300 * 0.15
+              this.tempY = -0.25 + (offsetY + 600) / 300 * 0.15 - this.rotationY / 360 * Math.PI
           else {
             if (offsetY >= 0)
-              this.head_offset_y = 0.5
+              this.tempY = 0.5 - this.rotationY / 360 * Math.PI
             else
-              this.head_offset_y = -0.4
+              this.tempY = -0.4 - this.rotationY / 360 * Math.PI
           }
-          this.hover = true
+          if (Math.abs(this.tempX) > Math.PI / 3 || this.tempY > Math.PI / 5 || this.tempY < -Math.PI / 5) this.hover = false
+          else {
+            this.hover = true
+          }
+
         })
       } else if (this.followMouse == "true" && this.followMouseMode == "box-scope") {
         this.renderer.domElement.addEventListener('mousemove', (event) => {
@@ -170,9 +178,9 @@ export default {
     },
     initCamera() {
       this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 1, 100)
-      this.camera.position.x = this.cameraPosX
-      this.camera.position.y = this.cameraPosY
-      this.camera.position.z = this.cameraPosZ
+      this.camera.position.x = 0
+      this.camera.position.y = 0
+      this.camera.position.z = 5
       this.camera.up.x = 0
       this.camera.up.y = 1
       this.camera.up.z = 0
@@ -248,9 +256,9 @@ export default {
     },
     walkAction() {
       if (this.walkable !== "true") return;
-      this.armL_x = this.legR_x = this.legR_x = this.baseValue = this.baseValue + this.stepDirection * this.stepCycle
-      this.armR_x = this.legL_x = -this.baseValue + this.stepDirection * this.stepCycle
-      this.model.rotation.y = this.baseValue / 5
+      this.armL_x = this.legR_x = this.legR_x = this.baseValue = this.baseValue + this.stepDirection * this.speed / 100
+      this.armR_x = this.legL_x = -this.baseValue + this.stepDirection * this.speed / 100
+      this.model.rotation.y = this.model.rotation.y + this.baseValue / 400
       this.head_y = this.baseValue / -8
       this.head_x = this.baseValue / 24
       if (Math.abs(this.baseValue) > this.pace) {
@@ -264,6 +272,15 @@ export default {
         else if (this.head_offset_x < -0.01) this.head_offset_x += 0.01
         if (this.head_offset_y > 0.01) this.head_offset_y -= 0.01
         else if (this.head_offset_y < -0.01) this.head_offset_y += 0.01
+      } else {
+        if (this.head_offset_x - this.tempX > 0.2) this.head_offset_x -= 0.08
+        else if (this.head_offset_x - this.tempX < -0.2) this.head_offset_x += 0.08
+        else this.head_offset_x = this.tempX
+        if (this.head_offset_y - this.tempY > 0.2) this.head_offset_y -= 0.08
+        else if (this.head_offset_y - this.tempY < -0.2) this.head_offset_y += 0.08
+        else this.head_offset_y = this.tempY
+        // this.head_offset_x = this.tempX
+        // this.head_offset_y = this.tempY
       }
       this.head_y = this.baseValue / -8 + this.head_offset_x
       this.head_x = this.baseValue / 24 + this.head_offset_y
