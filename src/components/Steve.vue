@@ -30,15 +30,12 @@ export default {
       validator: (val) => val >= 0 && val <= 1
     },
     speed: {
-      type: Number,
       default: 2
     },
     rotationX: {
-      type: Number,
       default: 10
     },
     rotationY: {
-      type: Number,
       default: 10
     },
     skinUrl: {
@@ -77,7 +74,8 @@ export default {
       head_offset_y: 0,
       hover: false,
       tempX: 0,
-      tempY: 0
+      tempY: 0,
+      throttleSwich: true
     }
   },
   mounted() {
@@ -106,58 +104,52 @@ export default {
 
       if (this.followMouse == "true" && this.followMouseMode == "window-scope") {
         document.addEventListener('mousemove', (event) => {
+          if (this.throttleSwich) {
+            this.throttleSwich = false
+            setTimeout(() => {
+              this.throttleSwich = true
+            }, 5)
+          } else {
+            return
+          }
           var rect = this.$el.getBoundingClientRect()
           var marginLeft = rect.left + this.width / 2
           var offsetX = event.clientX - marginLeft
-          var marginTop = rect.top + this.height / 2
+          var marginTop = rect.top + this.height / 3
           var offsetY = event.clientY - marginTop
           this.tempX = this.head_offset_x
           this.tempY = this.head_offset_y
+          var offsetDegressX = this.rotationX / 180 * Math.PI
+          var offsetDegressY = this.rotationY / 360 * Math.PI
           if (offsetX === 0) {
-            this.tempX = 0
+            this.tempX = -offsetDegressX
           }
           else if (Math.abs(offsetX) <= 500) {
-            this.tempX = offsetX / 500 * 0.6 - this.rotationX / 180 * Math.PI
+            this.tempX = offsetX / 500 * 0.6 - offsetDegressX
           }
-          else if (Math.abs(offsetX) > 500 && Math.abs(offsetX) <= 1000)
-            if (offsetX >= 0)
-              this.tempX = 0.6 + (offsetX - 500) / 500 * 0.1 - this.rotationX / 180 * Math.PI
-            else
-              this.tempX = -0.6 + (offsetX + 500) / 500 * 0.1 - this.rotationX / 180 * Math.PI
-          else if (Math.abs(offsetX) > 1000 && Math.abs(offsetX) <= 2000)
-            if (offsetX >= 0)
-              this.tempX = 0.7 + (offsetX - 1000) / 1000 * 0.1 - this.rotationX / 180 * Math.PI
-            else
-              this.tempX = -0.7 + (offsetX + 1000) / 1000 * 0.1 - this.rotationX / 180 * Math.PI
+          else if (Math.abs(offsetX) <= 1000) {
+            this.tempX = (offsetX > 0 ? 0.5 : -0.5) + offsetX / 5000 - offsetDegressX
+          }
+          else if (Math.abs(offsetX) <= 2000) {
+            this.tempX = (offsetX > 0 ? 0.6 : -0.6) + offsetX / 10000 - offsetDegressX
+          }
           else {
-            if (offsetX >= 0)
-              this.tempX = 0.8 - this.rotationX / 180 * Math.PI
-            else
-              this.tempX = -0.8 - this.rotationX / 180 * Math.PI
+            this.tempX = (offsetX > 0 ? 0.8 : -0.8) - offsetDegressX
           }
 
           if (offsetY === 0) {
-            this.tempY = 0.1 - this.rotationY / 360 * Math.PI
+            this.tempY = 0.1 - offsetDegressY
           }
           else if (Math.abs(offsetY) <= 300) {
-            this.tempY = offsetY / 300 * 0.2 + 0.1 - this.rotationY / 360 * Math.PI
+            this.tempY = offsetY / 1500 + 0.1 - offsetDegressY
           }
-          else if (Math.abs(offsetY) > 300 && Math.abs(offsetY) <= 600)
-            if (offsetY >= 0)
-              this.tempY = 0.3 + (offsetY - 300) / 300 * 0.1 - this.rotationY / 360 * Math.PI
-            else
-              this.tempY = -0.1 + (offsetY + 300) / 300 * 0.15 - this.rotationY / 360 * Math.PI
-          else if (Math.abs(offsetY) > 600 && Math.abs(offsetY) <= 900)
-            if (offsetY >= 0)
-              this.tempY = 0.4 + (offsetY - 600) / 300 * 0.1 - this.rotationY / 360 * Math.PI
-            else
-              this.tempY = -0.25 + (offsetY + 600) / 300 * 0.15 - this.rotationY / 360 * Math.PI
+          else if (Math.abs(offsetY) <= 900) {
+            this.tempY = (offsetY > 0 ? 0.2 : offsetY / 6000 + 0.05) + offsetY / 3000 - offsetDegressY
+          }
           else {
-            if (offsetY >= 0)
-              this.tempY = 0.5 - this.rotationY / 360 * Math.PI
-            else
-              this.tempY = -0.4 - this.rotationY / 360 * Math.PI
+              this.tempY = (offsetY > 0 ? 0.5 : -0.4) - offsetDegressY
           }
+
           if (Math.abs(this.tempX) > Math.PI / 3 || this.tempY > Math.PI / 5 || this.tempY < -Math.PI / 5) this.hover = false
           else {
             this.hover = true
@@ -166,9 +158,41 @@ export default {
         })
       } else if (this.followMouse == "true" && this.followMouseMode == "box-scope") {
         this.renderer.domElement.addEventListener('mousemove', (event) => {
-          this.head_offset_x = event.offsetX / this.width * 1.6 - 1
-          this.head_offset_y = event.offsetY / this.height * 0.6 - 0.2
-          this.hover = true
+          if (this.throttleSwich) {
+            this.throttleSwich = false
+            setTimeout(() => {
+              this.throttleSwich = true
+            }, 5)
+          } else {
+            return
+          }
+          var offsetX = event.offsetX
+          var offsetY = event.offsetY
+          this.tempX = this.head_offset_x
+          this.tempY = this.head_offset_y
+          if (offsetX === 0) {
+            this.tempX = -this.rotationX / 180 * Math.PI
+          }
+          else if (Math.abs(offsetX) <= this.width) {
+            this.tempX = 2 * (offsetX - this.width / 2) / this.width * 0.8 - this.rotationX / 180 * Math.PI
+          }
+          else {
+            this.tempX = 0
+          }
+
+          if (offsetY === 0) {
+            this.tempY = 0.1 - this.rotationY / 360 * Math.PI
+          }
+          else if (Math.abs(offsetY) <= this.height) {
+            this.tempY = 2 * (offsetY - this.height / 3) / this.height * 0.5 + 0.1 - this.rotationY / 360 * Math.PI
+          }
+          else {
+            this.tempY = 0
+          }
+          if (Math.abs(this.tempX) > Math.PI / 3 || this.tempY > Math.PI / 5 || this.tempY < -Math.PI / 5) this.hover = false
+          else {
+            this.hover = true
+          }
         })
       }
 
