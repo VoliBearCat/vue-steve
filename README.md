@@ -10,6 +10,7 @@ npm install vue-steve --save
 ```
 
 ```
+<steve :skinUrl="skin" :followScope="scope"></steve>
 ```
 
 ```
@@ -20,6 +21,7 @@ export default {
     data() {
       return {
         skin: './xxx.png',
+        scope: 'window'
       }
     }
     components: {
