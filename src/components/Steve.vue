@@ -18,49 +18,80 @@ export default {
   name: 'steve',
   props: {
     width: {
+      type: Number,
       default: 480,
       validator: (val) => val >= 0
     },
     height: {
+      type: Number,
       default: 640,
       validator: (val) => val >= 0
     },
     pace: {
+      type: Number,
       default: 6,
       validator: (val) => val >= 1 && val <= 10
     },
     speed: {
+      type: Number,
       default: 2,
-      validator: (val) => val >= -20 && val <= 20
+      validator: (val) => val >= -18 && val <= 18
     },
     rotationX: {
+      type: Number,
       default: 10
     },
     rotationY: {
+      type: Number,
       default: 10
     },
     skinUrl: {
       default: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAYAAACinX6EAAAABGdBTUEAALGPC/xhBQAAABh0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjM2qefiJQAABONJREFUaEPll99rVEcUx6+IUk1ijbQYosYfG+OaRtb4g2JEY42/EYuRipqioqIxMQiLVlDE+INqKlSfAkq0UChIUXzwFyL2sU956X9TmofjfM/u9/ZknLs30cUN8cJh5s6cuTvfz5w5MzslSnmaF9QIXP4bGYmmT5um3qjjGfl3arT/28aSX7j9+p8pab8xofsBoLHuC8kt/FKN72iDnd+ek55NK+XnfWviEnW0wya0uLFMDoIpvql+ZiKATCYj1gBlUgDg6nPlURIKSkbApAVgxSICYHY7fBYAAMEXz3yQBKAz2zQ5tgDFQ/Dy+dUKYuHsqjghEgD2vG+TIgcAAIUzCpgMmQOY8UPlWBJtRX2y82YKDKKWzatSsasys2XFooLlFtXINw2FkyA7v0qPPviiDQDohzEYi2+gn99l0sQ4W8c7Iqmi4vHjFgAm3tIwS4VA4OrGWi1peN/cPEfam79WPwChD8agjVFiAZS6R1QcgE66rrBqBeFOmFvFxjq+18jLgTPy9te8/D3YL29v5139nDz+6ZCsWTpHx8AXYzA23i7um/h22j2i4gB0pepdKC+YVVhV944wRj23pFb+vHxSnt/o0/JJf58M5X+UNwN5GTq9Ww0+8MUYjEUd38I38Z52j5gYAOI8UC2ZuTPk5oE2GTq+VdqyX6l4PJ0bBuTFpVMqHnU8gAIf+GIMxjbVV8f7HwDS7hETB4BbMWyFloZaudHZKoNHvpNbh9Y5cdvk2aVj8upaPj7m/rp1Rn7v2S797s4PH/hiDMbiG1x9Aih1j6g4AIY9wvZYR04e9Hwv949v0T83ONbuHu5wAjfJhc1rR9mdwxvl6r516gNfjMFYfEO3QHE7pN0jKg4Ak6cAlEOnduiK/nJwvZzbkZOzW1ukr6NZxcIu7lkt139Yr4Y6fOD7W/dOHXv/xK5CWYRIkPYOgTrBVRyAP4H9O4fFWjabFWupEx4ejv8K+xejyPVFR4+WtrQfePRI9DswV8ftc2/r0rhMG57aXw4AoWsx2soCgOKL5ecNwEWAXX2F/LFPOSIg6b9BWSLA2wIfDWBlNi+wpsVdWm5r+2OU2T6/v611QKIrV/63ri6J7t2T6OFDTZg4Kpk80aZm/VFHG0TRnj6VCMb3JH/6+P0czzItIijwQwAAlgrq7i4Y6px4EQIAqEhOyPpjDPz9SVsA/Da/zz6UBGp//0MBMBLGEwEKIDRBThITRERYkdYf9ZB4GwUhwHaM3//JASDsKQp1OwECsG1J/gBFcLbuC7TR9KkiwOYB7HtrKh6iaJg8BUAQ62y3vgSGCAkBcONxKaPddJcv/P+whjbr4/enpYAolOQoECHu54j3AFhBgGEBhIRZYNwCoTHFbRMCMHi2K4aAfguhLABsHih1CsQ5gBAIgCFv9z9hEAC3jQ175goDxIpjBBAAyhAAbS9CGlMEMAGO9xgMngJ++FMUAfinQAhWAgCItSvsAwhtkbIAKAXovWPQJjz/BMB7Wtb2sjgjgGUIQKkckQqgvb1dYKWOQfTRr7e3V6zFgngh4er54c+E6AOw/vQxCdGK8yMAMGyOYL/dImMGkCSQ7Un9NkfgMuXfI/CuN0YDAH724sXEqveFIhC0YWwSAIoMRUjFAIRyCIEoBCcu9WrtfCxEf4VHJUCX6ELH4HgAvAMPTt9mhQSK5wAAAABJRU5ErkJggg==",
     },
     scale: {
+      type: Number,
       default: 1,
       validator: (val) => val > 0
     },
     followMouse: {
-      default: "enable",
-      validator: (val) => ~['enable', 'disable'].indexOf(val)
+      type: Boolean,
+      default: true
     },
-    followMouseMode: {
-      default: "window-scope",
-      validator: (val) => ~['box-scope', 'window-scope'].indexOf(val)
+    followScope: {
+      default: "window",
+      validator: (val) => ~['box', 'window'].indexOf(val)
     },
     walkable: {
-      default: "enable",
-      validator: (val) => ~['enable', 'disable'].indexOf(val)
+      type: Boolean,
+      default: true
     },
     throttle: {
+      type: Number,
       default: 8,
       validator: (val) => val > 0
+    }
+  },
+  watch: {
+    skinUrl: function (val, oldVal) {
+      this.setSkin(val)
+    },
+    pace: function (val, oldVal) {
+      this.resetStatus()
+    },
+    speed: function (val, oldVal) {
+      this.resetStatus()
+    },
+    rotationX: function (val, oldVal) {
+      this.model.rotation.y = this.rotationX % 360 / 180 * Math.PI
+    },
+    rotationY: function (val, oldVal) {
+      this.model.rotation.x = this.rotationY % 360 / 180 * Math.PI
+    },
+    followMouse: function (val, oldVal) {
+      this.resetStatus()
+    },
+    followScope: function (val, oldVal) {
+      this.resetStatus()
     }
   },
   data() {
@@ -81,59 +112,15 @@ export default {
       tempX: 0,
       tempY: 0,
       throttleSwich: true,
-      _rotationX: 0,
-      _rotationY: 0,
-      _speed: 0,
-      _pace: 0,
-      _followMouse: '',
-      _followMouseMode: '',
-      _walkable: '',
-      _skinUrl: '',
       animationFrame: ''
     }
   },
   mounted() {
-    this.initProps()
     this.init()
   },
   methods: {
-    rotateX(rotationX) {
-      this._rotationX = rotationX
-      this.resetStatus()
-    },
-    rotateY(rotationY) {
-      this._rotationY = rotationY
-      this.resetStatus()
-    },
-    setSpeed(speed) {
-      if (speed < -20 || speed > 20) {
-        speed = 2
-        console.warn('parameter "speed" is invalid, Value should be between -20 to 20')
-      }
-      this._speed = speed
-      this.resetStatus()
-    },
-    setPace(pace) {
-      if (pace < 1 || pace > 10) {
-        pace = 6
-        console.warn('parameter "pace" is invalid, Value should be between 1 to 10')
-      }
-      this._pace = pace
-      this.resetStatus()
-    },
-    setFollowMouse(followMouse) {
-      this._followMouse = followMouse === 'enable' ? 'enable' : 'disable'
-      this.resetEvent()
-    },
-    setFollowMouseMode(followMouseMode) {
-      this._followMouseMode = followMouseMode === 'window-scope' ? 'window-scope' : 'box-scope'
-      this.resetEvent()
-    },
-    setWalkable(walkable) {
-      this._walkable = walkable === 'enable' ? 'enable' : 'disable'
-    },
     setSkin(skin) {
-      this._skinUrl = skin
+      this.skinUrl = skin
       this.scene.remove(this.model)
       this.$el.removeChild(this.renderer.domElement)
       this.renderer = null
@@ -144,8 +131,6 @@ export default {
     resetStatus() {
       this.stepDirection = 1
       this.baseValue = 0
-      this.model.rotation.y = this._rotationX % 360 / 180 * Math.PI
-      this.model.rotation.x = this._rotationY % 360 / 180 * Math.PI
       this.head_offset_x = 0
       this.head_offset_y = 0
     },
@@ -157,8 +142,8 @@ export default {
         document.removeEventListener('touchstart', this.moveEvent)
         document.removeEventListener('touchcancel', this.moveEndEven)
       }
-      if (this._followMouse === "enable") {
-        if (this._followMouseMode === "window-scope" || this.isMobile()) {
+      if (this.followMouse) {
+        if (this.followScope === "window" || this.isMobile()) {
           document.addEventListener(this.isMobile() ? 'touchmove' : 'mousemove', this.moveEvent)
         } else {
           this.renderer.domElement.addEventListener('mousemove', this.boxScopeMoveEvent)
@@ -178,20 +163,10 @@ export default {
       this.initObject()
       setTimeout(() => {
         this.model.add(this.buildModel(steveJson))
-        this.model.rotation.y = this._rotationX / 180 * Math.PI
-        this.model.rotation.x = this._rotationY / 180 * Math.PI
+        this.model.rotation.y = this.rotationX / 180 * Math.PI
+        this.model.rotation.x = this.rotationY / 180 * Math.PI
         this.animation()
       }, 0)
-    },
-    initProps() {
-      this._rotationX = this.rotationX
-      this._rotationY = this.rotationY
-      this._speed = this.speed
-      this._pace = this.pace
-      this._followMouse = this.followMouse
-      this._followMouseMode = this.followMouseMode
-      this._walkable = this.walkable
-      this._skinUrl = this.skinUrl
     },
     initThree() {
       this.renderer = new THREE.WebGLRenderer({
@@ -229,7 +204,7 @@ export default {
     },
     initObject() {
       var loader = new THREE.TextureLoader()
-      this.skin = loader.load(this._skinUrl)
+      this.skin = loader.load(this.skinUrl)
       this.skin.magFilter = THREE.NearestFilter
       this.skin.minFilter = THREE.NearestFilter
 
@@ -298,8 +273,8 @@ export default {
 
       this.tempX = this.head_offset_x
       this.tempY = this.head_offset_y
-      var offsetDegressX = this._rotationX / 180 * Math.PI
-      var offsetDegressY = this._rotationY / 360 * Math.PI
+      var offsetDegressX = this.rotationX / 180 * Math.PI
+      var offsetDegressY = this.rotationY / 360 * Math.PI
       if (offsetX === 0) {
         this.tempX = -offsetDegressX
       }
@@ -351,20 +326,20 @@ export default {
       this.tempX = this.head_offset_x
       this.tempY = this.head_offset_y
       if (offsetX === 0) {
-        this.tempX = -this._rotationX / 180 * Math.PI
+        this.tempX = -this.rotationX / 180 * Math.PI
       }
       else if (Math.abs(offsetX) <= this.width) {
-        this.tempX = 2 * (offsetX - this.width / 2) / this.width * 0.8 - this._rotationX / 180 * Math.PI
+        this.tempX = 2 * (offsetX - this.width / 2) / this.width * 0.8 - this.rotationX / 180 * Math.PI
       }
       else {
         this.tempX = 0
       }
 
       if (offsetY === 0) {
-        this.tempY = 0.1 - this._rotationY / 360 * Math.PI
+        this.tempY = 0.1 - this.rotationY / 360 * Math.PI
       }
       else if (Math.abs(offsetY) <= this.height) {
-        this.tempY = 2 * (offsetY - this.height / 3) / this.height * 0.5 + 0.1 - this._rotationY / 360 * Math.PI
+        this.tempY = 2 * (offsetY - this.height / 3) / this.height * 0.5 + 0.1 - this.rotationY / 360 * Math.PI
       }
       else {
         this.tempY = 0
@@ -382,13 +357,13 @@ export default {
       this.animationFrame = requestAnimationFrame(this.animation)
     },
     walkAction() {
-      if (this._walkable !== "enable") return;
-      this.armL_x = this.legR_x = this.legR_x = this.baseValue = this.baseValue + this.stepDirection * this._speed / 100
-      this.armR_x = this.legL_x = -this.baseValue + this.stepDirection * this._speed / 100
+      if (!this.walkable) return;
+      this.armL_x = this.legR_x = this.legR_x = this.baseValue = this.baseValue + this.stepDirection * this.speed / 100
+      this.armR_x = this.legL_x = -this.baseValue + this.stepDirection * this.speed / 100
       this.model.rotation.y = this.model.rotation.y + this.baseValue / 400
       this.head_y = this.baseValue / -8
       this.head_x = this.baseValue / 24
-      if (Math.abs(this.baseValue) > (this._pace / 10)) {
+      if (Math.abs(this.baseValue) > (this.pace / 10)) {
         this.stepDirection *= -1
       }
     },
@@ -402,7 +377,7 @@ export default {
       return flag;
     },
     followMouseAction() {
-      if (this._followMouse !== "enable") return;
+      if (!this.followMouse) return;
       if (!this.hover) {
         if (this.head_offset_x > 0.01) this.head_offset_x -= 0.01
         else if (this.head_offset_x < -0.01) this.head_offset_x += 0.01

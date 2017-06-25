@@ -1,6 +1,16 @@
 <template>
   <div id="app">
-    <Steve skinUrl="./static/technologist.png" followMouseMode="window-scope" ref="steve" :class="{'scope-border': followMouseMode==='box-scope'}"></Steve>
+    <Steve :class="{'scope-border': followScope==='box'}"
+           :skinUrl="skin" 
+           :followScope="followScope" 
+           :followMouse="followMouse"
+           :walkable="walkable"
+           :rotationX="rotationX"
+           :rotationY="rotationY"
+           :throttle="8"
+           :pace="pace" 
+           :speed="speed">
+    </Steve>
   
     <table>
       <thead>
@@ -25,28 +35,28 @@
           <td>pace</td>
           <td>步伐距离 1 ~ 10</td>
           <td>
-            <input type="number" v-model="pace" @change="changePace" max="10" min="1">
+            <input type="number" v-model.number.lazy="pace" max="10" min="1">
           </td>
         </tr>
         <tr>
           <td>speed</td>
-          <td>速度 -20 ~ 20</td>
+          <td>速度 -18 ~ 18</td>
           <td>
-            <input type="number" v-model="speed" @change="changeSpeed" max="20" min="-20">
+            <input type="number" v-model.number.lazy="speed" max="18" min="-18">
           </td>
         </tr>
         <tr>
           <td>rotationX</td>
           <td>水平旋转 Number(deg)</td>
           <td>
-            <input type="number" v-model.lazy="rotationX" @change="changeRotationX">
+            <input type="number" v-model.number="rotationX">
           </td>
         </tr>
         <tr>
           <td>rotationY</td>
           <td>垂直旋转 Number(deg)</td>
           <td>
-            <input type="number" v-model.number="rotationY" @change="changeRotationY">
+            <input type="number" v-model.number="rotationY">
           </td>
         </tr>
         <tr>
@@ -65,35 +75,33 @@
         </tr>
         <tr>
           <td>followMouse</td>
-          <td>视线是否跟随鼠标
-            <br>"enable"|"disable"</td>
+          <td>视线是否跟随鼠标 Boolean</td>
           <td>
-            <select v-model="followMouse" @change="changeFollowMouse">
-              <option>enable</option>
-              <option>disable</option>
+            <select v-model="followMouse">
+              <option :value="true">true</option>
+              <option :value="false">false</option>
             </select>
           </td>
           </td>
         </tr>
         <tr>
-          <td>followMouseMode</td>
+          <td>followScope</td>
           <td>视野跟随鼠标区域
-            <br>"window-scope"|"box-scope"</td>
+            <br>"window"|"box"</td>
           <td>
-            <select v-model="followMouseMode" @change="changeFollowMouseMode">
-              <option>box-scope</option>
-              <option>window-scope</option>
+            <select v-model="followScope">
+              <option>box</option>
+              <option>window</option>
             </select>
           </td>
         </tr>
         <tr>
           <td>walkable</td>
-          <td>行走动作
-            <br>"enable"|"disable"</td>
+          <td>行走动作 Boolean</td>
           <td>
-            <select v-model="walkable" @change="changeWalkable">
-              <option>enable</option>
-              <option>disable</option>
+            <select v-model="walkable">
+              <option :value="true">true</option>
+              <option :value="false">false</option>
             </select>
           </td>
         </tr>
@@ -122,9 +130,9 @@ export default {
       rotationY: 10,
       speed: 2,
       pace: 6,
-      followMouse: 'enable',
-      followMouseMode: 'window-scope',
-      walkable: 'enable',
+      followMouse: true,
+      followScope: 'window',
+      walkable: true,
       skin: "./static/technologist.png",
       skinArray: ['./static/technologist.png','./static/KiritoGamer.png','./static/char.png'],
       skinIndex: 0
@@ -142,38 +150,12 @@ export default {
       var reader = new FileReader()
       reader.onload = () => {
         this.skin = reader.result;
-        this.setSkin()
       }
       reader.readAsDataURL(file)
     },
-    changeRotationX() {
-      this.$refs.steve.rotateX(this.rotationX)
-    },
-    changeRotationY() {
-      this.$refs.steve.rotateY(this.rotationY)
-    },
-    changeSpeed() {
-      this.$refs.steve.setSpeed(this.speed)
-    },
-    changePace() {
-      this.$refs.steve.setPace(this.pace)
-    },
-    changeFollowMouse() {
-      this.$refs.steve.setFollowMouse(this.followMouse)
-    },
-    changeFollowMouseMode() {
-      this.$refs.steve.setFollowMouseMode(this.followMouseMode)
-    },
-    changeWalkable() {
-      this.$refs.steve.setWalkable(this.walkable)
-    },
     changeSkin(){
       this.skin = this.skinArray[++this.skinIndex % 3]
-      this.$refs.steve.setSkin(this.skin)
     },
-    setSkin(){
-      this.$refs.steve.setSkin(this.skin)
-    }
   }
 }
 </script>
