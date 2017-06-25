@@ -14,7 +14,6 @@ npm install vue-steve --save
 ```
 
 ```
-import 'three'
 import Steve from 'vue-steve'
 
 export default {

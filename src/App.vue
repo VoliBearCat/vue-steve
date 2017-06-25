@@ -105,7 +105,6 @@
       </tbody>
       <input accept="image/*" ref='input_file' type="file" @change="loadSkin" hidden>
     </table>
-  
   </div>
 </template>
 
@@ -169,7 +168,8 @@ export default {
       this.$refs.steve.setWalkable(this.walkable)
     },
     changeSkin(){
-      this.$refs.steve.setSkin(this.skinArray[++this.skinIndex % 3])
+      this.skin = this.skinArray[++this.skinIndex % 3]
+      this.$refs.steve.setSkin(this.skin)
     },
     setSkin(){
       this.$refs.steve.setSkin(this.skin)
@@ -199,7 +199,7 @@ html {
 
 table {
   display: inline-table;
-  margin: 60px 0 0 50px;
+  margin: 20px 0 0 50px;
   vertical-align: top;
   background: #fff;
   border-spacing: 0;
