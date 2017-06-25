@@ -88,9 +88,11 @@ export default {
       this.model.rotation.x = this.rotationY % 360 / 180 * Math.PI
     },
     followMouse: function (val, oldVal) {
+      this.resetEvent()
       this.resetStatus()
     },
     followScope: function (val, oldVal) {
+      this.resetEvent()
       this.resetStatus()
     }
   },
