@@ -53,7 +53,8 @@ export default {
       default: 1,
       validator: (val) => val > 0
     },
-    followMouse: {
+    /* 视线跟随鼠标指针 */
+    stareMouse: {
       type: Boolean,
       default: true
     },
@@ -87,7 +88,7 @@ export default {
     rotationY: function (val, oldVal) {
       this.model.rotation.x = this.rotationY % 360 / 180 * Math.PI
     },
-    followMouse: function (val, oldVal) {
+    stareMouse: function (val, oldVal) {
       this.resetEvent()
       this.resetStatus()
     },
@@ -136,15 +137,18 @@ export default {
       this.head_offset_x = 0
       this.head_offset_y = 0
     },
+    /* 设置/重置事件监听 */
     resetEvent() {
+      // 移除所有监听事件
       document.removeEventListener(this.isMobile() ? 'touchmove' : 'mousemove', this.moveEvent)
-      this.renderer.domElement.removeEventListener(this.isMobile() ? 'touchmove' : 'mousemove', this.boxScopeMoveEvent)
       document.removeEventListener(this.isMobile() ? 'touchend' : 'mouseout', this.moveEndEven)
+      this.renderer.domElement.removeEventListener(this.isMobile() ? 'touchmove' : 'mousemove', this.boxScopeMoveEvent)
       if (this.isMobile()) {
         document.removeEventListener('touchstart', this.moveEvent)
         document.removeEventListener('touchcancel', this.moveEndEven)
       }
-      if (this.followMouse) {
+      // 添加监听事件
+      if (this.stareMouse) {
         if (this.followScope === "window" || this.isMobile()) {
           document.addEventListener(this.isMobile() ? 'touchmove' : 'mousemove', this.moveEvent)
         } else {
@@ -170,6 +174,7 @@ export default {
         this.animation()
       }, 0)
     },
+    /* 实例化Three对象 */
     initThree() {
       this.renderer = new THREE.WebGLRenderer({
         antialias: true,
@@ -181,6 +186,7 @@ export default {
       // this.renderer.setClearAlpha(0)
       this.resetEvent()
     },
+    /* 初始化Camera */
     initCamera() {
       this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 1, 100)
       this.camera.position.x = 0
@@ -195,6 +201,7 @@ export default {
         z: 0
       })
     },
+    /* 初始化场景对象 */
     initScene() {
       this.scene = new THREE.Scene()
       this.scene.add(new THREE.AmbientLight(0xCCCCCC))
@@ -204,6 +211,7 @@ export default {
       this.light.position.set(0, 3, 10)
       this.scene.add(this.light)
     },
+    /* 初始化模型 */
     initObject() {
       var loader = new THREE.TextureLoader()
       this.skin = loader.load(this.skinUrl)
@@ -240,7 +248,7 @@ export default {
           faceUV[2].set(u1 * this.modelUV.uRatio, v0 * this.modelUV.vRatio)
         }
       }
-      this.modelUV.recenter = function (box, _arg) {
+      this.modelUV.recenter = (box, _arg) => {
         var matrix, x, y, z
         x = _arg[0], y = _arg[1], z = _arg[2]
         matrix = new THREE.Matrix4()
@@ -354,7 +362,7 @@ export default {
     animation() {
       this.tasks
       this.walkAction()
-      this.followMouseAction()
+      this.stareMouseAction()
       this.renderer.render(this.scene, this.camera)
       this.animationFrame = requestAnimationFrame(this.animation)
     },
@@ -378,8 +386,8 @@ export default {
       }
       return flag;
     },
-    followMouseAction() {
-      if (!this.followMouse) return;
+    stareMouseAction() {
+      if (!this.stareMouse) return;
       if (!this.hover) {
         if (this.head_offset_x > 0.01) this.head_offset_x -= 0.01
         else if (this.head_offset_x < -0.01) this.head_offset_x += 0.01
@@ -430,28 +438,28 @@ export default {
           if (childPart.name) {
             Object.defineProperties(this, {
               [childPart.name + '_x']: {
-                set: function (x) {
+                set: (x) => {
                   childPart.rotation.x = x
                 },
-                get: function () {
+                get: () => {
                   return childPart.rotation.x
                 },
                 configurable: true
               },
               [childPart.name + '_y']: {
-                set: function (y) {
+                set: (y) => {
                   childPart.rotation.y = y
                 },
-                get: function () {
+                get: () => {
                   return childPart.rotation.y || 0
                 },
                 configurable: true
               },
               [childPart.name + '_z']: {
-                set: function (z) {
+                set: (z) => {
                   childPart.rotation.z = z
                 },
-                get: function () {
+                get: () => {
                   return childPart.rotation.z || 0
                 },
                 configurable: true

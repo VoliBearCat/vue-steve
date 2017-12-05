@@ -3,7 +3,7 @@
     <Steve :class="{'scope-border': followScope==='box'}"
            :skinUrl="skin" 
            :followScope="followScope" 
-           :followMouse="followMouse"
+           :stareMouse="stareMouse"
            :walkable="walkable"
            :rotationX="rotationX"
            :rotationY="rotationY"
@@ -74,10 +74,10 @@
           <td>1</td>
         </tr>
         <tr>
-          <td>followMouse</td>
+          <td>stareMouse</td>
           <td>视线是否跟随鼠标 Boolean</td>
           <td>
-            <select v-model="followMouse">
+            <select v-model="stareMouse">
               <option :value="true">true</option>
               <option :value="false">false</option>
             </select>
@@ -130,7 +130,7 @@ export default {
       rotationY: 10,
       speed: 2,
       pace: 6,
-      followMouse: true,
+      stareMouse: true,
       followScope: 'window',
       walkable: true,
       skin: "./static/technologist.png",
@@ -139,7 +139,9 @@ export default {
     }
   },
   mounted() {
-
+    document.querySelector('body').addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    })
   },
   methods: {
     clickSkinBtn() {

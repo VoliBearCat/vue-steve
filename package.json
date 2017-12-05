@@ -1,6 +1,6 @@
 {
   "name": "vue-steve",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "A Vue.js project, Minecraft's Steve-Model",
   "author": "VolibearElric <624081567@qq.com>",
   "private": false,
@@ -56,7 +56,7 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
+    "> 0%",
     "not ie <= 8"
   ]
 }
