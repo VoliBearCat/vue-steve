@@ -47,7 +47,7 @@ export default {
 | width           | 画布宽度                                          | 480                    |
 | height          | 画布高度                                          | 640                    |
 | pace            | 步伐距离 1 ~ 10                                   | 6                      |
-| speed           | 速度 Number  -20 ~ 20                             | 2                      |
+| speed           | 速度 Number  -18 ~ 18                             | 2                      |
 | rotationX       | 水平旋转 Number(deg)                              | 10                     |
 | rotationY       | 垂直旋转 Number(deg)                              | 10                     |
 | skinUrl         | 自定义皮肤<br>base64 or URL (32px*64px)           | steve-skin by base64   |
